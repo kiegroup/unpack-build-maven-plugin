@@ -8,11 +8,9 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <!--Checkout the main project-->
-    <!--TODO - change it to ustream one-->
-    <git.repository.url>/Users/tzimanyi/Downloads/github/unpack-build-maven-plugin/unpack-build-maven-plugin</git.repository.url>
-    <git.repository.revision>master</git.repository.revision>
-    <git.revision.type>branch</git.revision.type>
+    <git.repository.url>file://${project.basedir}/../../../../</git.repository.url>
+    <git.repository.revision>integration-test-1</git.repository.revision>
+    <git.revision.type>tag</git.revision.type>
     <repository.directory>./checkout-temp/</repository.directory>
 
     <scm.plugin.version>1.11.1</scm.plugin.version>
@@ -58,7 +56,7 @@
               <outputDirectoryPath>target/classes</outputDirectoryPath>
               <rootDirectory>${repository.directory}</rootDirectory>
               <excludeDirectories>
-                <excludeDirectory>^.*-integrationtests-project</excludeDirectory>
+                <excludeDirectory>^.*-itests</excludeDirectory>
               </excludeDirectories>
             </configuration>
           </execution>
