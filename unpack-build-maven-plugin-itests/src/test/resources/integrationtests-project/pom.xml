@@ -9,6 +9,8 @@
 
   <properties>
     <!--Checkout the main project-->
+    <!--TODO - change it to ustream one-->
+    <git.repository.url>/Users/tzimanyi/Downloads/github/unpack-build-maven-plugin/unpack-build-maven-plugin</git.repository.url>
     <git.repository.revision>master</git.repository.revision>
     <git.revision.type>branch</git.revision.type>
     <repository.directory>./checkout-temp/</repository.directory>
@@ -54,7 +56,10 @@
             <configuration>
               <version>${download.build.version}</version>
               <outputDirectoryPath>target/classes</outputDirectoryPath>
-              <rootDirectory>${sources.directory}</rootDirectory>
+              <rootDirectory>${repository.directory}</rootDirectory>
+              <excludeDirectories>
+                <excludeDirectory>^.*-integrationtests-project</excludeDirectory>
+              </excludeDirectories>
             </configuration>
           </execution>
         </executions>
