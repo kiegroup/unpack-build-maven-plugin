@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.kie.test</groupId>
+  <artifactId>unpack-build-test-project</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <!--Checkout the main project-->
+    <git.repository.revision>master</git.repository.revision>
+    <git.revision.type>branch</git.revision.type>
+    <repository.directory>./checkout-temp/</repository.directory>
+
+    <scm.plugin.version>1.11.1</scm.plugin.version>
+    <unpack.build.version>1.0-SNAPSHOT</unpack.build.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>${scm.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>checkout-drools</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>checkout</goal>
+            </goals>
+            <configuration>
+              <!--The URL property is set by the integration test (that is why it is not in this pom.xml)-->
+              <connectionUrl>scm:git:${git.repository.url}</connectionUrl>
+              <scmVersion>${git.repository.revision}</scmVersion>
+              <scmVersionType>${git.revision.type}</scmVersionType>
+              <checkoutDirectory>${repository.directory}</checkoutDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.kie</groupId>
+        <artifactId>unpack-build-maven-plugin</artifactId>
+        <version>${unpack.build.version}</version>
+        <executions>
+          <execution>
+            <id>download-product-jars</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack-build</goal>
+            </goals>
+            <configuration>
+              <version>${download.build.version}</version>
+              <outputDirectoryPath>target/classes</outputDirectoryPath>
+              <rootDirectory>${sources.directory}</rootDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
