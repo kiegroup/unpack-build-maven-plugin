@@ -3,7 +3,7 @@ package org.kie.unpackbuildplugin.util;
 import java.util.Arrays;
 
 public enum ArtifactPackaging {
-    POM, JAR, WAR, BUNDLE, MAVEN_PLUGIN, MAVEN_ARCHETYPE;
+    POM, JAR, WAR, BUNDLE, MAVEN_PLUGIN, MAVEN_ARCHETYPE, KJAR;
 
     private static final String FILETYPE_POM = "pom";
     private static final String FILETYPE_JAR = "jar";
@@ -23,6 +23,7 @@ public enum ArtifactPackaging {
             case BUNDLE: return FILETYPE_JAR;
             case MAVEN_PLUGIN: return FILETYPE_JAR;
             case MAVEN_ARCHETYPE: return FILETYPE_JAR;
+            case KJAR: return FILETYPE_JAR;
             default:
                 throw new IllegalArgumentException(String.format(Messages.UNKNOWN_ARTIFACT_PACKAGING, artifactPackaging));
         }
