@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
@@ -80,8 +81,8 @@ public class UnpackBuildMojo extends AbstractMojo {
     }
 
     private void downloadAndUnpackArtifact(final File moduleDirectory) throws MojoExecutionException, MojoFailureException {
-        excludeDirectories.add(new File(moduleDirectory, "src" + File.separator + "test").getAbsolutePath());
-        excludeDirectories.add(new File(moduleDirectory, "src" + File.separator + "main").getAbsolutePath());
+        excludeDirectories.add(Pattern.quote(new File(moduleDirectory, "src" + File.separator + "test").getAbsolutePath()));
+        excludeDirectories.add(Pattern.quote(new File(moduleDirectory, "src" + File.separator + "main").getAbsolutePath()));
         if (!isIgnored(moduleDirectory)) {
             final Model model = readModel(moduleDirectory);
             if (model != null) {
@@ -151,7 +152,7 @@ public class UnpackBuildMojo extends AbstractMojo {
 
         Files.copy(artifactFile.toPath(), Paths.get(baseDirectory.getAbsolutePath(), TARGET_FOLDER, artifactFile.getName()));
 
-        excludeDirectories.add(outputPath.toAbsolutePath().toString());
+        excludeDirectories.add(Pattern.quote(outputPath.toAbsolutePath().toString()));
     }
 
     private ArtifactCoordinate getArtifactCoordinate(final String groupId, final String artifactId, final String version,
