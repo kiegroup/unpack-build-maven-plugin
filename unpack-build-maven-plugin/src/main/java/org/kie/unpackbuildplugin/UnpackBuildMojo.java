@@ -80,11 +80,12 @@ public class UnpackBuildMojo extends AbstractMojo {
     }
 
     private void downloadAndUnpackArtifact(final File moduleDirectory) throws MojoExecutionException, MojoFailureException {
-        excludeDirectories.add(new File(moduleDirectory, "src" + File.pathSeparator + "test").getAbsolutePath());
-        excludeDirectories.add(new File(moduleDirectory, "src" + File.pathSeparator + "main").getAbsolutePath());
+        excludeDirectories.add(new File(moduleDirectory, "src" + File.separator + "test").getAbsolutePath());
+        excludeDirectories.add(new File(moduleDirectory, "src" + File.separator + "main").getAbsolutePath());
         if (!isIgnored(moduleDirectory)) {
             final Model model = readModel(moduleDirectory);
             if (model != null) {
+                getLog().info("Processing directory " + moduleDirectory.getAbsolutePath());
                 if (!ArtifactPackaging.isIgnored(model.getPackaging())) {
                     final File resolvedFile = resolveArtifact(model);
                     try {
