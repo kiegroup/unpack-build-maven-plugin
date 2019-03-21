@@ -8,6 +8,7 @@ public enum ArtifactPackaging {
     WAR,
     BUNDLE,
     MAVEN_PLUGIN,
+    TAKARI_MAVEN_PLUGIN,
     MAVEN_ARCHETYPE,
     KJAR,
     GWT_LIB;
@@ -26,18 +27,14 @@ public enum ArtifactPackaging {
         switch (getArtifactPackagingFromString(artifactPackaging)) {
             case POM:
                 return FILETYPE_POM;
-            case JAR:
-                return FILETYPE_JAR;
             case WAR:
                 return FILETYPE_WAR;
+            case JAR:
             case BUNDLE:
-                return FILETYPE_JAR;
             case MAVEN_PLUGIN:
-                return FILETYPE_JAR;
+            case TAKARI_MAVEN_PLUGIN:
             case MAVEN_ARCHETYPE:
-                return FILETYPE_JAR;
             case KJAR:
-                return FILETYPE_JAR;
             case GWT_LIB:
                 return FILETYPE_JAR;
             default:
@@ -48,6 +45,8 @@ public enum ArtifactPackaging {
     private static ArtifactPackaging getArtifactPackagingFromString(final String stringValue) {
         if (MAVEN_PLUGIN.toString().equals(stringValue.toUpperCase())) {
             return MAVEN_PLUGIN;
+        } else if (TAKARI_MAVEN_PLUGIN.toString().equals(stringValue.toUpperCase())) {
+            return TAKARI_MAVEN_PLUGIN;
         } else if (MAVEN_ARCHETYPE.toString().equals(stringValue.toUpperCase())) {
             return MAVEN_ARCHETYPE;
         } else if (GWT_LIB.toString().equals(stringValue.toUpperCase())) {
@@ -61,6 +60,8 @@ public enum ArtifactPackaging {
     public String toString() {
         if (this == MAVEN_PLUGIN) {
             return "MAVEN-PLUGIN";
+        } else if (this == TAKARI_MAVEN_PLUGIN) {
+            return "TAKARI-MAVEN-PLUGIN";
         } else if (this == MAVEN_ARCHETYPE) {
             return "MAVEN-ARCHETYPE";
         } else if (this == GWT_LIB) {
