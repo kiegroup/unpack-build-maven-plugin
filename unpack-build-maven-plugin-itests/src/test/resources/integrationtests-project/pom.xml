@@ -25,7 +25,7 @@
         <version>${scm.plugin.version}</version>
         <executions>
           <execution>
-            <id>checkout-drools</id>
+            <id>checkout-repository</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>checkout</goal>
