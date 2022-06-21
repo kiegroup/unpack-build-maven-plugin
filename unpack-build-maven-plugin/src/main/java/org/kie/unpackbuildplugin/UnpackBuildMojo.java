@@ -64,7 +64,7 @@ public class UnpackBuildMojo extends AbstractMojo {
 
     // Real parameters from here
 
-    @Parameter(property = "unpackbuild.rootdirectory", required = true)
+    @Parameter(property = "unpackbuild.rootdirectory", defaultValue = "${project.basedir}")
     private File rootDirectory;
 
     @Parameter(defaultValue = "${project.version}", property = "unpackbuild.version")
