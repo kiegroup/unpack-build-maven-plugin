@@ -67,6 +67,9 @@ public class UnpackBuildMojo extends AbstractMojo {
     @Parameter(property = "unpackbuild.rootdirectory", required = true)
     private File rootDirectory;
 
+    @Parameter(property = "unpackbuild.recursive", defaultValue = "false")
+    private boolean recursive;
+
     @Parameter(defaultValue = "${project.version}", property = "unpackbuild.version")
     private String version;
 
@@ -104,7 +107,7 @@ public class UnpackBuildMojo extends AbstractMojo {
             }
 
             final File[] submodules = moduleDirectory.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
-            if (submodules != null) {
+            if (recursive && submodules != null) {
                 for (final File submodule : submodules) {
                     downloadAndUnpackArtifact(submodule);
                 }
