@@ -1,7 +1,6 @@
 package org.kie.unpackbuildplugin;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,8 +9,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
@@ -25,6 +24,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.shared.transfer.artifact.ArtifactCoordinate;
 import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
@@ -64,7 +64,7 @@ public class UnpackBuildMojo extends AbstractMojo {
 
     // Real parameters from here
 
-    @Parameter(property = "unpackbuild.rootdirectory", required = true)
+    @Parameter(property = "unpackbuild.rootdirectory", defaultValue = "${project.basedir}")
     private File rootDirectory;
 
     @Parameter(property = "unpackbuild.recursive", defaultValue = "false")
@@ -73,17 +73,24 @@ public class UnpackBuildMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.version}", property = "unpackbuild.version")
     private String version;
 
-    @Parameter
+    @Parameter(property = "unpackbuild.exclusions")
     private List<String> excludeDirectories;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (excludeDirectories == null) {
             excludeDirectories = new ArrayList<>();
         }
-        downloadAndUnpackArtifact(rootDirectory);
+        downloadAndUnpackArtifact(getMavenProject(rootDirectory));
     }
 
-    private void downloadAndUnpackArtifact(final File moduleDirectory) throws MojoExecutionException, MojoFailureException {
+    private MavenProject getMavenProject(File rootDirectory) throws MojoExecutionException {
+        MavenProject mavenProject = new MavenProject(readModel(rootDirectory));
+        mavenProject.setFile(rootDirectory.toPath().resolve("pom.xml").toFile());
+        return mavenProject;
+    }
+
+    private void downloadAndUnpackArtifact(final MavenProject project) throws MojoExecutionException, MojoFailureException {
+        File moduleDirectory = project.getBasedir();
         excludeDirectories.add(Pattern.quote(new File(moduleDirectory, "src" + File.separator + "test").getAbsolutePath()));
         excludeDirectories.add(Pattern.quote(new File(moduleDirectory, "src" + File.separator + "main").getAbsolutePath()));
         if (!isIgnored(moduleDirectory)) {
@@ -105,11 +112,9 @@ public class UnpackBuildMojo extends AbstractMojo {
                                                         ArtifactPackaging.convertToFileType(model.getPackaging())));
                 }
             }
-
-            final File[] submodules = moduleDirectory.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
-            if (recursive && submodules != null) {
-                for (final File submodule : submodules) {
-                    downloadAndUnpackArtifact(submodule);
+            if (recursive) {
+                for (final File submodule : listModules(project)) {
+                    downloadAndUnpackArtifact(getMavenProject(submodule));
                 }
             }
         } else {
@@ -117,6 +122,10 @@ public class UnpackBuildMojo extends AbstractMojo {
             getLog().info(String.format(Messages.IGNORE_DIRECTORY, moduleDirectory.getAbsolutePath())
                                   + " " + Messages.DEFINED_AS_EXCLUDED);
         }
+    }
+
+    private List<File> listModules(MavenProject project) {
+        return project.getModules().stream().map(it -> project.getBasedir().toPath().resolve(it).toFile()).collect(Collectors.toList());
     }
 
     private File resolveArtifact(final Model model) throws MojoExecutionException {
