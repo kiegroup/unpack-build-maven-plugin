@@ -12,7 +12,6 @@
     <git.repository.revision>integration-test-1</git.repository.revision>
     <git.revision.type>tag</git.revision.type>
     <repository.directory>./checkout-temp/</repository.directory>
-
     <scm.plugin.version>1.11.1</scm.plugin.version>
     <unpack.build.version>1.0-SNAPSHOT</unpack.build.version>
   </properties>
@@ -41,24 +40,30 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.kie</groupId>
-        <artifactId>unpack-build-maven-plugin</artifactId>
-        <version>${unpack.build.version}</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <id>download-product-jars</id>
             <phase>generate-sources</phase>
             <goals>
-              <goal>unpack-build</goal>
+              <goal>run</goal>
             </goals>
             <configuration>
-              <version>${download.build.version}</version>
-              <outputDirectoryPath>target/classes</outputDirectoryPath>
-              <rootDirectory>${repository.directory}</rootDirectory>
-              <excludeDirectories>
-                <excludeDirectory>^.*-itests</excludeDirectory>
-              </excludeDirectories>
-              <recursive>true</recursive>
+              <goals>
+                <goal>clean</goal>
+                <goal>org.kie:unpack-build-maven-plugin:${unpack.build.version}:unpack-build</goal>
+              </goals>
+              <projectsDirectory>${repository.directory}</projectsDirectory>
+              <pomIncludes>
+                <pomInclude>pom.xml</pomInclude>
+              </pomIncludes>
+              <properties>
+                <unpackbuild.version>${download.build.version}</unpackbuild.version>
+                <unpackbuild.recursive>true</unpackbuild.recursive>
+                <unpackbuild.exclusions>^.*-itests</unpackbuild.exclusions>
+              </properties>
             </configuration>
           </execution>
         </executions>

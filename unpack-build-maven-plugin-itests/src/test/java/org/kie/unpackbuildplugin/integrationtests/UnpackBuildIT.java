@@ -16,10 +16,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UnpackBuildIT {
 
     private static final String IT_PROJECT_FOLDER = "/integrationtests-project";
+    private static final String IT_PROJECT_FOLDER_INVOKER = "/integrationtests-project-invoker";
 
     @Test
-    public void testBuildProject() throws IOException, VerificationException {
-        final File testDir = ResourceExtractor.simpleExtractResources(getClass(), IT_PROJECT_FOLDER);
+    public void testBuildProjectWithPluginConfig() throws IOException, VerificationException {
+        testBuildProject(IT_PROJECT_FOLDER);
+    }
+
+    @Test
+    public void testBuildProjectUsingInvoker() throws IOException, VerificationException {
+
+        testBuildProject(IT_PROJECT_FOLDER_INVOKER);
+    }
+
+    private void testBuildProject(String projectFolder) throws IOException, VerificationException {
+        final File testDir = ResourceExtractor.simpleExtractResources(getClass(), projectFolder);
         final Verifier verifier = new Verifier(testDir.getAbsolutePath());
         try {
             verifier.executeGoal("clean");
