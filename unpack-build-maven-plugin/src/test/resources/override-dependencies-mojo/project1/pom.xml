@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.acme</groupId>
+  <artifactId>parent-project</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>Test OverrideDependenciesMojo :: parent</name>
+  <modules>
+    <module>module1</module>
+    <module>module2</module>
+  </modules>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.acme</groupId>
+        <artifactId>some-artifact</artifactId>
+        <version>0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.acme2</groupId>
+        <artifactId>moduleX</artifactId>
+        <version>0.9</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.kie</groupId>
+        <artifactId>unpack-build-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <configuration>
+          <overridingPomsDirectory>${basedir}/target/test-classes/override-dependencies-mojo/patch-unzipped</overridingPomsDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>override-dependencies</goal>
+            </goals>
+            <phase>generate-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
