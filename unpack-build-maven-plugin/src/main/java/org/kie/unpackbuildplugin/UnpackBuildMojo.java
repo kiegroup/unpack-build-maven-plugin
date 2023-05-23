@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -162,7 +163,7 @@ public class UnpackBuildMojo extends AbstractMojo {
         unArchiver.setDestDirectory(outputPath.toFile());
         unArchiver.extract();
 
-        Files.copy(artifactFile.toPath(), Paths.get(baseDirectory.getAbsolutePath(), TARGET_FOLDER, artifactFile.getName()));
+        Files.copy(artifactFile.toPath(), Paths.get(baseDirectory.getAbsolutePath(), TARGET_FOLDER, artifactFile.getName()), StandardCopyOption.REPLACE_EXISTING);
 
         excludeDirectories.add(Pattern.quote(outputPath.toAbsolutePath().toString()));
     }

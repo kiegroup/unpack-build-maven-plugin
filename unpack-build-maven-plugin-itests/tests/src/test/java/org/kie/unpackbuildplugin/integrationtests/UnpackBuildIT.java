@@ -1,15 +1,15 @@
 package org.kie.unpackbuildplugin.integrationtests;
 
+import org.apache.maven.it.VerificationException;
+import org.apache.maven.it.Verifier;
+import org.apache.maven.it.util.ResourceExtractor;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.maven.it.VerificationException;
-import org.apache.maven.it.Verifier;
-import org.apache.maven.it.util.ResourceExtractor;
-import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +31,7 @@ public class UnpackBuildIT {
 
     private void testBuildProject(String projectFolder) throws IOException, VerificationException {
         final File testDir = ResourceExtractor.simpleExtractResources(getClass(), projectFolder);
+        System.out.println("Test dir is " + testDir);
         final Verifier verifier = new Verifier(testDir.getAbsolutePath());
         try {
             verifier.executeGoal("clean");
@@ -40,17 +41,9 @@ public class UnpackBuildIT {
             verifier.resetStreams();
         }
 
-        final File checkoutRootDirectory = new File(testDir, "checkout-temp");
-        final File mavenPluginProjectDirectory = new File(checkoutRootDirectory, "unpack-build-maven-plugin");
-        final File mavenPluginTestsDirectory = new File(checkoutRootDirectory, "unpack-build-maven-plugin-itests");
-
-        assertThat(checkoutRootDirectory).exists().isDirectory();
-        assertThat(mavenPluginProjectDirectory).exists().isDirectory();
-        assertThat(mavenPluginTestsDirectory).exists().isDirectory();
-
-        assertThat(new File(mavenPluginTestsDirectory, "target")).doesNotExist();
-
-        assertMavenPluginProjectDirectory(mavenPluginProjectDirectory);
+        final File testRootDirectory = new File(testDir.getParentFile().getParentFile().getParentFile().getParentFile(), "unpack-build-maven-plugin");
+        assertThat(testRootDirectory).exists().isDirectory();
+        assertMavenPluginProjectDirectory(testRootDirectory);
     }
 
     private void assertMavenPluginProjectDirectory(final File mavenPluginProjectDirectory) {

@@ -8,37 +8,12 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <git.repository.url>file://${project.basedir}/../../../../</git.repository.url>
-    <git.repository.revision>integration-test-1</git.repository.revision>
-    <git.revision.type>tag</git.revision.type>
-    <repository.directory>./checkout-temp/</repository.directory>
-    <scm.plugin.version>1.11.1</scm.plugin.version>
+    <repository.directory>${project.basedir}/../../../../unpack-build-maven-plugin/</repository.directory>
     <unpack.build.version>1.0-SNAPSHOT</unpack.build.version>
   </properties>
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-scm-plugin</artifactId>
-        <version>${scm.plugin.version}</version>
-        <executions>
-          <execution>
-            <id>checkout-repository</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>checkout</goal>
-            </goals>
-            <configuration>
-              <!--The URL property is set by the integration test (that is why it is not in this pom.xml)-->
-              <connectionUrl>scm:git:${git.repository.url}</connectionUrl>
-              <scmVersion>${git.repository.revision}</scmVersion>
-              <scmVersionType>${git.revision.type}</scmVersionType>
-              <checkoutDirectory>${repository.directory}</checkoutDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
