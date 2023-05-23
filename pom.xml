@@ -29,7 +29,6 @@
     <plexus.archiver.version>4.7.1</plexus.archiver.version>
     <artifact.transfer.version>0.13.1</artifact.transfer.version>
     <assertj.version>3.24.2</assertj.version>
-    <maven.resolver.impl.version>1.9.10</maven.resolver.impl.version>
     <maven.verifier.version>1.8.0</maven.verifier.version>
     <maven.plugin.annotations.version>3.9.0</maven.plugin.annotations.version>
     <version.maven.plugin.testing.harness>3.3.0</version.maven.plugin.testing.harness>
@@ -90,12 +89,6 @@
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>${assertj.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.resolver</groupId>
-        <artifactId>maven-resolver-impl</artifactId>
-        <version>${maven.resolver.impl.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
