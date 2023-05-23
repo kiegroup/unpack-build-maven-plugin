@@ -51,24 +51,11 @@ Such profile can be configured e.g. like this:
       <name>unpackbuild.version</name>
     </property>
   </activation>
+  <properties>
+    <maven.main.skip>true</maven.main.skip>
+  </properties>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <skipMain>true</skipMain>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.kie</groupId>
         <artifactId>unpack-build-maven-plugin</artifactId>
